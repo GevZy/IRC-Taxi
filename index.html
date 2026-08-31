@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRC Taxi — Safe. Comfortable. On Time.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold: #C9973E;
+  --gold-bright: #F0C869;
+  --gold-dim: #8a6a2c;
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --serif: 'Bricolage Grotesque', sans-serif;
+  --sans: 'Inter', sans-serif;
+  --maxw: 1160px;
+}
+[data-theme="dark"]{
+  --bg: #0A0B0D;
+  --bg-raised: #131519;
+  --bg-card: #15171B;
+  --text: #F2EFE9;
+  --text-dim: #9B9891;
+  --border: #26241d;
+  --border-soft: #1e1f22;
+  --input-bg: #101114;
+}
+[data-theme="light"]{
+  --bg: #FAF7F0;
+  --bg-raised: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --text: #1A1712;
+  --text-dim: #6b6559;
+  --border: #E7DFCB;
+  --border-soft: #eee7d6;
+  --input-bg: #FFFFFF;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.5;
+  transition:background .3s ease, color .3s ease;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit; text-decoration:none;}
+img{max-width:100%; display:block;}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+h1,h2,h3{font-family:var(--serif); font-weight:700; letter-spacing:-0.01em; line-height:1.05;}
+
+/* ---------- header ---------- */
+header{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border-soft);
+}
+.nav{display:flex; align-items:center; justify-content:space-between; padding:16px 0;}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--serif); font-weight:800; font-size:1.3rem;}
+.brand-mark{
+  width:34px; height:34px; border-radius:50%;
+  border:1.5px solid var(--gold);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold-bright); font-size:1rem;
+}
+.nav-links{display:flex; gap:32px; font-size:.92rem; color:var(--text-dim);}
+.nav-links a:hover{color:var(--gold-bright);}
+.nav-actions{display:flex; align-items:center; gap:14px;}
+.theme-toggle{
+  width:42px; height:42px; border-radius:50%;
+  border:1px solid var(--border);
+  background:var(--bg-raised);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:1.1rem;
+}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:12px 22px; border-radius:var(--radius-s);
+  font-weight:600; font-size:.92rem; cursor:pointer;
+  border:1px solid transparent; transition:transform .15s ease, opacity .15s ease;
+}
+.btn:hover{transform:translateY(-1px);}
+.btn-gold{background:linear-gradient(180deg, var(--gold-bright), var(--gold)); color:#171105;}
+.btn-outline{background:transparent; border-color:var(--gold-dim); color:var(--text);}
+.btn-outline:hover{border-color:var(--gold-bright);}
+@media (max-width: 860px){ .nav-links{display:none;} }
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative; padding:90px 0 70px; overflow:hidden;
+  border-bottom:1px solid var(--border-soft);
+}
+.hero::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse at 80% 0%, color-mix(in srgb, var(--gold) 14%, transparent), transparent 60%);
+}
+.hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center; position:relative;}
+@media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+.eyebrow{color:var(--gold-bright); font-size:.85rem; font-weight:600; display:flex; align-items:center; gap:10px; margin-bottom:18px;}
+.eyebrow-line{width:28px; height:1px; background:var(--gold);}
+.hero h1{font-size:clamp(2.4rem, 5vw, 3.6rem);}
+.hero p.lede{margin-top:20px; font-size:1.08rem; color:var(--text-dim); max-width:44ch;}
+.hero-cta{display:flex; gap:14px; margin-top:34px; flex-wrap:wrap;}
+.hero-stats{display:flex; gap:34px; margin-top:44px; flex-wrap:wrap;}
+.stat b{display:block; font-family:var(--serif); font-size:1.6rem; color:var(--gold-bright);}
+.stat span{font-size:.82rem; color:var(--text-dim);}
+.hero-visual{
+  position:relative; aspect-ratio:4/5; border-radius:var(--radius-m);
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--gold) 22%, transparent), transparent 55%),
+    var(--bg-raised);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.hero-visual svg{width:100%; height:100%;}
+.hero-badge{
+  position:absolute; bottom:18px; left:18px; right:18px;
+  background:color-mix(in srgb, var(--bg) 75%, transparent);
+  backdrop-filter:blur(6px);
+  border:1px solid var(--border); border-radius:var(--radius-s);
+  padding:14px 16px; display:flex; align-items:center; justify-content:space-between;
+}
+.hero-badge b{font-family:var(--serif); color:var(--gold-bright);}
+.hero-badge small{color:var(--text-dim); font-size:.78rem;}
+
+/* ---------- section shell ---------- */
+section{padding:76px 0;}
+.section-head{max-width:56ch; margin-bottom:42px;}
+.section-head h2{font-size:clamp(1.7rem,3vw,2.3rem);}
+.section-head p{color:var(--text-dim); margin-top:12px; font-size:1rem;}
+.divider{border-top:1px solid var(--border-soft);}
+
+/* ---------- services ---------- */
+.services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); border-radius:var(--radius-m); overflow:hidden;}
+@media (max-width:860px){ .services-grid{grid-template-columns:1fr 1fr;} }
+@media (max-width:560px){ .services-grid{grid-template-columns:1fr;} }
+.service-cell{background:var(--bg-card); padding:30px 26px;}
+.service-icon{width:42px; height:42px; border-radius:8px; border:1px solid var(--gold-dim); display:flex; align-items:center; justify-content:center; color:var(--gold-bright); margin-bottom:18px; font-size:1.15rem;}
+.service-cell h3{font-size:1.05rem; margin-bottom:6px;}
+.service-cell p{font-size:.88rem; color:var(--text-dim);}
+
+/* ---------- packages ---------- */
+.pkg-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+@media (max-width:900px){ .pkg-grid{grid-template-columns:1fr;} }
+.pkg-card{
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-m);
+  padding:28px; display:flex; flex-direction:column; position:relative;
+}
+.pkg-card.popular{border-color:var(--gold);}
+.pkg-tag{position:absolute; top:20px; right:20px; font-size:.68rem; font-weight:700; letter-spacing:.03em; color:#171105; background:var(--gold-bright); padding:4px 10px; border-radius:99px;}
+.pkg-card h3{font-size:1.15rem; margin-bottom:6px;}
+.pkg-card .desc{color:var(--text-dim); font-size:.86rem; margin-bottom:20px;}
+.pkg-price{font-family:var(--serif); font-size:2rem; color:var(--gold-bright); margin-bottom:2px;}
+.pkg-price small{font-family:var(--sans); font-size:.85rem; color:var(--text-dim); font-weight:500;}
+.pkg-feat{list-style:none; margin:20px 0 26px; display:flex; flex-direction:column; gap:10px; font-size:.87rem;}
+.pkg-feat li{display:flex; gap:10px; align-items:flex-start; color:var(--text-dim);}
+.pkg-feat li::before{content:"—"; color:var(--gold);}
+.pkg-card .btn{margin-top:auto;}
+
+/* ---------- hours + contact strip ---------- */
+.strip{display:grid; grid-template-columns:1.1fr .9fr; gap:0; border:1px solid var(--border); border-radius:var(--radius-m); overflow:hidden;}
+@media (max-width:860px){ .strip{grid-template-columns:1fr;} }
+.strip-hours{padding:36px; background:var(--bg-card);}
+.strip-hours table{width:100%; border-collapse:collapse; margin-top:18px;}
+.strip-hours td{padding:9px 0; border-bottom:1px solid var(--border-soft); font-size:.92rem;}
+.strip-hours td:first-child{color:var(--text-dim);}
+.strip-hours td:last-child{text-align:right; font-weight:600;}
+.strip-contact{padding:36px; background:linear-gradient(160deg, color-mix(in srgb, var(--gold) 16%, transparent), var(--bg-raised) 60%);}
+.strip-contact .row{display:flex; align-items:center; gap:12px; margin:14px 0; font-size:.95rem;}
+.strip-contact .row .ic{width:34px; height:34px; border-radius:50%; border:1px solid var(--gold-dim); display:flex; align-items:center; justify-content:center; color:var(--gold-bright); flex-shrink:0;}
+
+/* ---------- booking ---------- */
+.booking{background:var(--bg-raised); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft);}
+.booking-grid{display:grid; grid-template-columns:.85fr 1.15fr; gap:56px; align-items:start;}
+@media (max-width:920px){ .booking-grid{grid-template-columns:1fr;} }
+.booking-side{position:sticky; top:90px;}
+.selected-pkg{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-m); padding:20px; margin-top:22px;}
+.selected-pkg .label{font-size:.75rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.04em;}
+.selected-pkg .name{font-family:var(--serif); font-size:1.2rem; margin-top:6px;}
+.selected-pkg .price{color:var(--gold-bright); font-weight:700; margin-top:6px; font-size:1.1rem;}
+
+form.book{display:flex; flex-direction:column; gap:20px;}
+.field{display:flex; flex-direction:column; gap:8px;}
+.field label{font-size:.85rem; font-weight:600; color:var(--text-dim);}
+.field input, .field select, .field textarea{
+  background:var(--input-bg); border:1px solid var(--border); border-radius:var(--radius-s);
+  padding:13px 14px; color:var(--text); font-size:.95rem; font-family:var(--sans);
+  outline:none; transition:border-color .15s ease;
+}
+.field input:focus, .field select:focus, .field textarea:focus{border-color:var(--gold);}
+.field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:560px){ .field-row{grid-template-columns:1fr;} }
+
+.music-block{
+  border:1px solid var(--gold-dim); border-radius:var(--radius-m);
+  padding:20px; background:color-mix(in srgb, var(--gold) 6%, transparent);
+}
+.music-block > p{font-weight:600; font-size:.95rem; margin-bottom:4px;}
+.music-block > span{font-size:.82rem; color:var(--text-dim); display:block; margin-bottom:14px;}
+.music-toggle{display:flex; gap:10px; margin-bottom:14px;}
+.chip{
+  padding:9px 16px; border-radius:99px; border:1px solid var(--border);
+  font-size:.85rem; cursor:pointer; background:var(--bg-card); color:var(--text-dim);
+}
+.chip.active{border-color:var(--gold); color:var(--gold-bright); background:color-mix(in srgb, var(--gold) 12%, transparent);}
+.music-options{display:none; grid-template-columns:1fr 1fr; gap:10px;}
+.music-options.show{display:grid;}
+@media (max-width:560px){ .music-options.show{grid-template-columns:1fr;} }
+.music-opt{
+  display:flex; align-items:center; gap:10px; padding:11px 14px;
+  border:1px solid var(--border); border-radius:var(--radius-s); cursor:pointer; font-size:.87rem;
+  background:var(--bg-card);
+}
+.music-opt input{accent-color:var(--gold);}
+.music-opt.checked{border-color:var(--gold); color:var(--gold-bright);}
+
+.send-via{display:flex; gap:10px; margin-bottom:4px;}
+.send-opt{flex:1; text-align:center; padding:12px; border-radius:var(--radius-s); border:1px solid var(--border); cursor:pointer; font-size:.87rem; background:var(--bg-card);}
+.send-opt.active{border-color:var(--gold); color:var(--gold-bright);}
+
+.submit-note{font-size:.78rem; color:var(--text-dim); margin-top:-6px;}
+
+/* ---------- footer ---------- */
+footer{padding:44px 0; border-top:1px solid var(--border-soft);}
+.footer-grid{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+.footer-grid .brand{font-size:1.05rem;}
+.footer-note{font-size:.82rem; color:var(--text-dim);}
+
+/* toast */
+#toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--gold-bright); color:#171105; padding:14px 22px; border-radius:var(--radius-s);
+  font-weight:600; font-size:.9rem; opacity:0; pointer-events:none; transition:all .25s ease;
+  z-index:100; max-width:90vw; text-align:center;
+}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="brand-mark">◆</span> IRC Taxi</div>
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#packages">Packages</a>
+      <a href="#hours">Hours &amp; Contact</a>
+      <a href="#book">Book a ride</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+      <a href="#book" class="btn btn-gold">Book now</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-line"></span> KIGALI'S DRIVER-ON-CALL</div>
+      <h1>The city moves on your schedule, not the other way around.</h1>
+      <p class="lede">Airport runs, corporate accounts, hotel transfers, or a ride across town — one dedicated driver, tracked from pickup to drop-off. Book in under a minute.</p>
+      <div class="hero-cta">
+        <a href="#book" class="btn btn-gold">Book a ride</a>
+        <a href="https://wa.me/250780557704" target="_blank" class="btn btn-outline">Chat on WhatsApp</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>24/7</b><span>Most days of the week</span></div>
+        <div class="stat"><b>15m</b><span>Complimentary wait time</span></div>
+        <div class="stat"><b>7</b><span>Ride types on offer</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a1c22"/>
+            <stop offset="100%" stop-color="#0A0B0D"/>
+          </linearGradient>
+          <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8a6a2c"/>
+            <stop offset="100%" stop-color="#F0C869"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="500" fill="url(#skyGrad)"/>
+        <g opacity="0.55">
+          <rect x="30" y="120" width="34" height="260" fill="#15171b"/>
+          <rect x="80" y="90" width="26" height="290" fill="#181a1e"/>
+          <rect x="120" y="150" width="40" height="230" fill="#15171b"/>
+          <rect x="270" y="100" width="30" height="280" fill="#181a1e"/>
+          <rect x="315" y="140" width="46" height="240" fill="#15171b"/>
+        </g>
+        <g stroke="#F0C869" stroke-opacity="0.25">
+          <line x1="30" y1="140" x2="64" y2="140"/>
+          <line x1="30" y1="170" x2="64" y2="170"/>
+          <line x1="270" y1="130" x2="300" y2="130"/>
+          <line x1="315" y1="170" x2="361" y2="170"/>
+        </g>
+        <path d="M0 400 L400 400 L400 420 L0 420 Z" fill="#0d0e11"/>
+        <ellipse cx="200" cy="330" rx="150" ry="10" fill="#000" opacity="0.35"/>
+        <g transform="translate(70,255)">
+          <path d="M10 60 Q10 30 45 25 L85 20 Q110 18 130 35 L250 40 Q262 42 262 58 L262 78 Q262 88 250 88 L18 88 Q6 88 6 76 Z" fill="url(#goldGrad)"/>
+          <rect x="55" y="30" width="150" height="30" rx="6" fill="#0A0B0D"/>
+          <circle cx="60" cy="90" r="20" fill="#0A0B0D" stroke="url(#goldGrad)" stroke-width="4"/>
+          <circle cx="210" cy="90" r="20" fill="#0A0B0D" stroke="url(#goldGrad)" stroke-width="4"/>
+        </g>
+      </svg>
+      <div class="hero-badge">
+        <div><b>Airport Comfort Pickup</b><br><small>Meet &amp; greet, flight monitoring included</small></div>
+        <span style="color:var(--gold-bright); font-family:var(--serif); font-weight:700;">25,000 RWF</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Wherever you're headed, there's a ride built for it</h2>
+      <p>From a solo airport run to standing corporate accounts — pick the service that matches the trip.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-cell"><div class="service-icon">✈</div><h3>Airport pick-up &amp; drop-off</h3><p>Pre-book to or from Kigali International Airport, available around the clock.</p></div>
+      <div class="service-cell"><div class="service-icon">◎</div><h3>City rides</h3><p>Point-to-point trips across Kigali, no waiting on the street for a cab.</p></div>
+      <div class="service-cell"><div class="service-icon">▤</div><h3>Corporate transportation</h3><p>Custom billing and reporting for companies with regular staff travel.</p></div>
+      <div class="service-cell"><div class="service-icon">▦</div><h3>Event transportation</h3><p>Coordinated pickups and drop-offs for weddings, conferences and parties.</p></div>
+      <div class="service-cell"><div class="service-icon">≋</div><h3>Long-distance trips</h3><p>Out-of-city travel with a driver who knows the route and the stops.</p></div>
+      <div class="service-cell"><div class="service-icon">⌂</div><h3>Hotel transportation</h3><p>Standing arrangements with hotels for guest transfers, any hour.</p></div>
+      <div class="service-cell"><div class="service-icon">☺</div><h3>Individual transportation</h3><p>A dedicated driver for personal errands, school runs or daily commutes.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="packages" class="divider">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Two ways to book</h2>
+      <p>A single pickup, or the whole day. Prices are shown up front — no surprises at drop-off.</p>
+    </div>
+    <div class="pkg-grid">
+      <div class="pkg-card popular" data-pkg="Airport Comfort Pickup" data-price="25,000 RWF">
+        <span class="pkg-tag">Most popular</span>
+        <h3>Airport Comfort Pickup</h3>
+        <p class="desc">Seamless arrivals with meet &amp; greet service.</p>
+        <div class="pkg-price">25,000 <small>RWF</small></div>
+        <ul class="pkg-feat">
+          <li>Family return included — driver drops you, takes family home</li>
+          <li>1-hour pickup window</li>
+          <li>15 min complimentary wait time</li>
+          <li>Flight monitoring included</li>
+        </ul>
+        <a href="#book" class="btn btn-gold select-pkg">Book arrival</a>
+      </div>
+      <div class="pkg-card" data-pkg="Day Hire (4 Hours)" data-price="80,000 RWF">
+        <h3>Day Hire (4 Hours)</h3>
+        <p class="desc">Perfect for meetings and city errands.</p>
+        <div class="pkg-price">80,000 <small>RWF / 4 hrs</small></div>
+        <ul class="pkg-feat">
+          <li>Dedicated chauffeur</li>
+          <li>Unlimited km within Kigali city</li>
+          <li>Business-ready vehicles</li>
+        </ul>
+        <a href="#book" class="btn btn-outline select-pkg">Reserve for half-day</a>
+      </div>
+      <div class="pkg-card" data-pkg="Custom trip" data-price="Quoted on request">
+        <h3>Custom trip</h3>
+        <p class="desc">Long-distance, event fleets, or a recurring corporate schedule.</p>
+        <div class="pkg-price" style="font-size:1.3rem;">Quoted on request</div>
+        <ul class="pkg-feat">
+          <li>Multi-vehicle event coordination</li>
+          <li>Out-of-city and multi-day trips</li>
+          <li>Custom billing for companies</li>
+        </ul>
+        <a href="#book" class="btn btn-outline select-pkg">Request a quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hours" class="divider">
+  <div class="wrap">
+    <div class="strip">
+      <div class="strip-hours">
+        <h2 style="font-size:1.4rem;">Working hours</h2>
+        <table>
+          <tr><td>Monday</td><td>24 hours</td></tr>
+          <tr><td>Tuesday</td><td>24 hours</td></tr>
+          <tr><td>Wednesday</td><td>24 hours</td></tr>
+          <tr><td>Thursday</td><td>24 hours</td></tr>
+          <tr><td>Friday</td><td>Morning – 17:30</td></tr>
+          <tr><td>Saturday</td><td>18:00 – 23:00</td></tr>
+          <tr><td>Sunday</td><td>24 hours</td></tr>
+        </table>
+      </div>
+      <div class="strip-contact">
+        <h2 style="font-size:1.4rem;">Get in touch</h2>
+        <div class="row"><div class="ic">☎</div> <a href="tel:+250780557704">+250 780 557 704</a></div>
+        <div class="row"><div class="ic">☎</div> <a href="tel:+250726207724">+250 726 207 724</a></div>
+        <div class="row"><div class="ic">🌐</div> <a href="https://irctaxi.kesug.com" target="_blank">irctaxi.kesug.com</a></div>
+        <a href="#book" class="btn btn-gold" style="margin-top:16px;">Book your ride today</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="book" class="booking divider">
+  <div class="wrap booking-grid">
+    <div class="booking-side">
+      <div class="eyebrow"><span class="eyebrow-line"></span> BOOK A RIDE</div>
+      <h2 style="font-size:2rem;">Tell us the trip, we'll handle the rest</h2>
+      <p style="color:var(--text-dim); margin-top:14px;">Fill in the details below. Your request goes straight to the driver — no account needed, and nothing is stored beyond this booking.</p>
+      <div class="selected-pkg" id="selectedPkgBox">
+        <div class="label">Selected package</div>
+        <div class="name" id="selPkgName">Airport Comfort Pickup</div>
+        <div class="price" id="selPkgPrice">25,000 RWF</div>
+      </div>
+    </div>
+
+    <form class="book" id="bookForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" placeholder="Jean-Paul Habimana" required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input type="tel" id="phone" placeholder="+250 700 000 000" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email address (optional)</label>
+        <input type="email" id="email" placeholder="you@example.com">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="pickup">Pickup location</label>
+          <input type="text" id="pickup" placeholder="Kanombe International Airport" required>
+        </div>
+        <div class="field">
+          <label for="dropoff">Drop-off</label>
+          <input type="text" id="dropoff" placeholder="Where are you going?" required>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="date">Date</label>
+          <input type="date" id="date" required>
+        </div>
+        <div class="field">
+          <label for="time">Time</label>
+          <input type="time" id="time" required>
+        </div>
+      </div>
+
+      <div class="music-block">
+        <p>Do you like hearing music on your trip?</p>
+        <span>If yes, pick a genre and your driver will have it ready.</span>
+        <div class="music-toggle">
+          <div class="chip active" data-music="no">No, keep it quiet</div>
+          <div class="chip" data-music="yes">Yes, play music</div>
+        </div>
+        <div class="music-options" id="musicOptions">
+          <label class="music-opt"><input type="radio" name="music" value="Gospel songs"> Gospel songs</label>
+          <label class="music-opt"><input type="radio" name="music" value="Alan B & slow songs"> Alan B &amp; slow songs</label>
+          <label class="music-opt"><input type="radio" name="music" value="Reggae music"> Reggae music</label>
+          <label class="music-opt"><input type="radio" name="music" value="Afro-hiphop songs"> Afro-hiphop songs</label>
+          <label class="music-opt"><input type="radio" name="music" value="Century songs"> Century songs</label>
+          <label class="music-opt"><input type="radio" name="music" value="Classic instruments"> Classic instruments</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="notes">Anything else the driver should know? (optional)</label>
+        <textarea id="notes" rows="3" placeholder="Extra bags, child seat, flight number..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Send this booking via</label>
+        <div class="send-via">
+          <div class="send-opt active" data-send="whatsapp">WhatsApp</div>
+          <div class="send-opt" data-send="email">Email</div>
+        </div>
+        <span class="submit-note">Booking opens pre-filled in WhatsApp or your email app — nothing is saved on a server.</span>
+      </div>
+
+      <button type="submit" class="btn btn-gold" style="align-self:flex-start; padding-left:34px; padding-right:34px;">Send booking request</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="brand"><span class="brand-mark">◆</span> IRC Taxi</div>
+    <div class="footer-note">Safe · Comfortable · On time — Kigali, Rwanda</div>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+// ---- theme toggle ----
+const root = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+function applyTheme(t){
+  root.setAttribute('data-theme', t);
+  themeToggle.textContent = t === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('irc-taxi-theme', t);
+}
+applyTheme(localStorage.getItem('irc-taxi-theme') || 'dark');
+themeToggle.addEventListener('click', () => {
+  applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+// ---- package selection ----
+const selPkgName = document.getElementById('selPkgName');
+const selPkgPrice = document.getElementById('selPkgPrice');
+document.querySelectorAll('.select-pkg').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const card = btn.closest('.pkg-card');
+    selPkgName.textContent = card.dataset.pkg;
+    selPkgPrice.textContent = card.dataset.price;
+  });
+});
+
+// ---- music toggle ----
+const musicChips = document.querySelectorAll('.chip');
+const musicOptions = document.getElementById('musicOptions');
+musicChips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    musicChips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    if(chip.dataset.music === 'yes'){
+      musicOptions.classList.add('show');
+    } else {
+      musicOptions.classList.remove('show');
+      document.querySelectorAll('input[name="music"]').forEach(r => r.checked = false);
+    }
+  });
+});
+document.querySelectorAll('.music-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.music-opt').forEach(o => o.classList.remove('checked'));
+    opt.classList.add('checked');
+  });
+});
+
+// ---- send-via toggle ----
+let sendVia = 'whatsapp';
+document.querySelectorAll('.send-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.send-opt').forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+    sendVia = opt.dataset.send;
+  });
+});
+
+// ---- driver contact details (edit these) ----
+const DRIVER_WHATSAPP = '250780557704'; // no + or leading zeros
+const DRIVER_EMAIL = 'yourbusiness@example.com'; // replace with the real inbox
+
+// ---- form submit ----
+const form = document.getElementById('bookForm');
+const toast = document.getElementById('toast');
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const wantsMusic = document.querySelector('.chip[data-music="yes"]').classList.contains('active');
+  const musicChoice = wantsMusic
+    ? (document.querySelector('input[name="music"]:checked')?.value || 'Yes — genre not picked yet')
+    : 'No';
+
+  const data = {
+    package: selPkgName.textContent,
+    price: selPkgPrice.textContent,
+    name: document.getElementById('fullName').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value || '—',
+    pickup: document.getElementById('pickup').value,
+    dropoff: document.getElementById('dropoff').value,
+    date: document.getElementById('date').value,
+    time: document.getElementById('time').value,
+    music: musicChoice,
+    notes: document.getElementById('notes').value || '—'
+  };
+
+  const messageLines = [
+    `New IRC Taxi booking`,
+    ``,
+    `Package: ${data.package} (${data.price})`,
+    `Name: ${data.name}`,
+    `Phone: ${data.phone}`,
+    `Email: ${data.email}`,
+    `Pickup: ${data.pickup}`,
+    `Drop-off: ${data.dropoff}`,
+    `Date: ${data.date}`,
+    `Time: ${data.time}`,
+    `Music preference: ${data.music}`,
+    `Notes: ${data.notes}`
+  ];
+  const message = messageLines.join('\n');
+
+  if(sendVia === 'whatsapp'){
+    const url = `https://wa.me/${DRIVER_WHATSAPP}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+    showToast('Opening WhatsApp with your booking filled in — hit send there to confirm.');
+  } else {
+    const subject = encodeURIComponent(`IRC Taxi booking — ${data.name}`);
+    const body = encodeURIComponent(message);
+    window.location.href = `mailto:${DRIVER_EMAIL}?subject=${subject}&body=${body}`;
+    showToast('Opening your email app with the booking filled in — hit send there to confirm.');
+  }
+});
+</script>
+
+</body>
+</html>
