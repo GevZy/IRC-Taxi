@@ -44,15 +44,23 @@ document.querySelectorAll('.music-opt').forEach(opt => {
   });
 });
 
-// ---- send-via toggle ----
-let sendVia = 'whatsapp';
-document.querySelectorAll('.send-opt').forEach(opt => {
-  opt.addEventListener('click', () => {
-    document.querySelectorAll('.send-opt').forEach(o => o.classList.remove('active'));
-    opt.classList.add('active');
-    sendVia = opt.dataset.send;
-  });
+// ---- hero slideshow (car illustration <-> logo) ----
+const heroSlides = document.querySelectorAll('.hero-slide');
+const heroDots = document.querySelectorAll('.hero-slide-dots .dot');
+let heroIndex = 0;
+function showHeroSlide(i){
+  heroIndex = i;
+  heroSlides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  heroDots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+}
+heroDots.forEach((dot, idx) => {
+  dot.addEventListener('click', () => showHeroSlide(idx));
 });
+if (heroSlides.length > 1) {
+  setInterval(() => {
+    showHeroSlide((heroIndex + 1) % heroSlides.length);
+  }, 4500);
+}
 
 // ---- form submit ----
 const form = document.getElementById('bookForm');
@@ -73,12 +81,10 @@ form.addEventListener('submit', async (e) => {
     : 'No';
 
   const booking = {
-    method: sendVia, // 'whatsapp' | 'email'
     package: selPkgName.textContent,
     price: selPkgPrice.textContent,
     name: document.getElementById('fullName').value,
     phone: document.getElementById('phone').value,
-    email: document.getElementById('email').value || '—',
     pickup: document.getElementById('pickup').value,
     dropoff: document.getElementById('dropoff').value,
     date: document.getElementById('date').value,
@@ -104,13 +110,8 @@ form.addEventListener('submit', async (e) => {
       return;
     }
 
-    if (result.method === 'whatsapp') {
-      window.open(result.url, '_blank');
-      showToast('Opening WhatsApp with your booking filled in — hit send there to confirm.');
-    } else {
-      form.reset();
-      showToast('Booking sent — the driver has received it by email.');
-    }
+    window.open(result.url, '_blank');
+    showToast('Opening WhatsApp with your booking filled in — hit send there to confirm.');
   } catch (err) {
     showToast('Could not reach the server. Check your connection and try again.');
   } finally {

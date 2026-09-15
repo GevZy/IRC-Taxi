@@ -1,7 +1,7 @@
 {
   "name": "irc-taxi-booking-site",
   "version": "1.0.0",
-  "description": "IRC Taxi client website with booking form that emails or WhatsApps the driver — no database.",
+  "description": "IRC Taxi client website with a WhatsApp-only booking form — no database.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "nodemailer": "^6.9.14"
+    "express": "^4.19.2"
   }
 }

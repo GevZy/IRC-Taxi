@@ -1,19 +1,19 @@
 # IRC Taxi — booking website
 
 A small Node/Express site for IRC Taxi: services, packages, working hours,
-and a booking form. There's no database — every booking is sent straight
-to the driver, either as a pre-filled **WhatsApp** message or a real
-**email**, depending on what the customer picks on the form.
+and a booking form. There's no database and no email — every booking is
+sent straight to the driver as a pre-filled **WhatsApp** message.
 
 ```
 irc-taxi-node/
-├── server.js           Express server + the two API routes
+├── server.js           Express server + the booking API
 ├── package.json
 ├── .env.example         Copy this to .env and fill in real values
 └── public/
     ├── index.html        The page itself
     ├── css/style.css      All styling, light + dark theme
-    └── js/main.js          Theme toggle, form logic, talks to the server
+    ├── js/main.js          Theme toggle, hero slideshow, form logic
+    └── images/logo.jpeg    Company logo, used in the hero slideshow
 ```
 
 ## 1. Install
@@ -25,50 +25,24 @@ this folder:
 npm install
 ```
 
-## 2. Add the driver's phone number and email
+## 2. Add the driver's WhatsApp number
 
-The site reads its contact details from a `.env` file — you never have to
-touch the code to change them.
+The site reads its contact number from a `.env` file — you never have to
+touch the code to change it.
 
 1. Make a copy of `.env.example` and rename it to `.env`:
    ```bash
    cp .env.example .env
    ```
-2. Open `.env` in any text editor and fill in:
-
-   **WhatsApp number** — the number that receives bookings when a customer
-   chooses "Send via WhatsApp":
+2. Open `.env` and set:
    ```
    WHATSAPP_NUMBER=250780557704
    ```
    Use the country code, no `+`, no spaces, and no leading `0`. For a
    Rwandan number like `0780 557 704`, that becomes `250780557704`.
 
-   **Recipient email** — the inbox that receives bookings when a customer
-   chooses "Send via Email":
-   ```
-   RECIPIENT_EMAIL=owner@example.com
-   ```
-
-3. To actually *send* that email, the server needs to log in to a mailbox.
-   The easiest option is a Gmail account:
-   - Turn on 2-Step Verification on that Google account.
-   - Go to **Google Account → Security → App passwords**, and create one
-     (choose "Mail" as the app). Google gives you a 16-character password.
-   - Put that in `.env`:
-     ```
-     SMTP_USER=your-sending-account@gmail.com
-     SMTP_PASS=the16characterapppassword
-     ```
-   - Leave `SMTP_HOST`, `SMTP_PORT`, and `SMTP_SECURE` as they are — those
-     are already set for Gmail.
-
-   Using a different email provider (Outlook, a custom domain, etc.) works
-   too — just change `SMTP_HOST`/`SMTP_PORT` to that provider's SMTP
-   details and use the matching login.
-
-   If you skip this step, the WhatsApp option still works fine on its
-   own — email bookings will just show an error until SMTP is configured.
+That's the only setting needed — every booking (and the "Chat on WhatsApp"
+button in the hero) uses this number.
 
 ## 3. Run it
 
@@ -86,26 +60,19 @@ npm run dev
 
 ## How a booking is sent
 
-- **WhatsApp**: the server builds a `wa.me` link with the booking details
-  pre-filled and sends it back to the browser, which opens WhatsApp. The
-  customer still taps "send" themselves inside WhatsApp — nothing is sent
-  automatically, since real automatic WhatsApp sending requires the paid
-  WhatsApp Business API.
-- **Email**: the server sends the email itself, silently, using the SMTP
-  details in `.env`. The customer doesn't need an email app open — it's
-  a normal server-side send, and the reply-to address is set to whatever
-  email the customer typed in, so replying from the inbox goes straight
-  back to them.
-
-Nothing is written to a database or file — each booking only exists for
-the moment it's being sent.
+The server builds a `wa.me` link with the booking details pre-filled
+(name, phone, pickup/drop-off, date, time, package, music preference,
+notes) and sends it back to the browser, which opens WhatsApp. The
+customer taps "send" themselves inside WhatsApp to confirm — nothing is
+sent automatically, since real automatic WhatsApp sending requires the
+paid WhatsApp Business API. Nothing is written to a database or file.
 
 ## Deploying
 
 This is a normal Express app, so it runs on any Node host (Render,
-Railway, a VPS, etc.). Whatever platform you use, set the same variables
-from `.env` in that platform's environment variable settings — don't
-upload the `.env` file itself.
+Railway, a VPS, etc.). Whatever platform you use, set `WHATSAPP_NUMBER`
+in that platform's environment variable settings — don't upload the
+`.env` file itself.
 
 ## Customizing
 
@@ -115,3 +82,8 @@ upload the `.env` file itself.
   `public/index.html` — edit the text directly.
 - The music-genre list on the booking form is in the `#musicOptions`
   block in `public/index.html`.
+- The hero section crossfades between the car illustration and the
+  company logo every 4.5 seconds (`showHeroSlide` in `public/js/main.js`)
+  — click either dot in the top-right of that panel to switch manually.
+  Swap `public/images/logo.jpeg` for a new file (keep the same name, or
+  update the `src` in `index.html`) to change the logo shown.
